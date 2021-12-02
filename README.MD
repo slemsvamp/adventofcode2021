@@ -18,3 +18,7 @@ cl -MT -nologo -Gm- -GR- -EHa- -Od -Oi -WX -W4 -wd4100 -FC -Z7 -D_CRT_SECURE_NO_
 ## Day 01
 
 There's not too much to say about day one. I can definitely feel that I would have solved this faster using trusty old C#. I had to learn the hard way that `strtok` mutates the data you're tokenizing by placing a null character where the delimiter is found, but once I got past that debacle I had no real hurdles.
+
+## Day 02
+
+Quite a simple day, I think this one took about five minutes, funnily enough this one went a lot quicker than yesterday's problem.
