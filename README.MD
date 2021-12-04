@@ -30,3 +30,8 @@ Quite a simple day, I think this one took about five minutes, funnily enough thi
 Ok, bare with me. The solution I'm currently comitting isn't exactly what I hoped it would be. I definitely know that my C# solution would have been a lot fancier, but I want to see that as me being in need of practice.
 
 I was tempted to write the main function as `Part2(Part1())` and skip the whole `u32 length = Part1()` but I couldn't really allow myself. ;)
+
+## Day 04
+I'm already learning a thing or two about how I approach these problems compared to the usual aim. I typically want a dynamic easily modifiable solution that could fit almost any new change to the in-format. Which isn't as important during a test where you're solving a specific problem. I would have to be ready for the right-justification of numbers on the boards to change, the delimiters, the size of the boards, the amount of new lines between boards in the file and many other variables. I have, on purpose, chosen to not respect these possible changes in order to make something that solves this specific task. Thus, you will see things like `u32 boardSizeInFile = 16 /* columns in bytes */ * 5 /* rows */ + 2 /* \r\n */;`, which makes it easier to traverse to the next board, that spacing doesn't vary in the input (by design).
+
+The second part of today's task was pretty quick, I copied the Part1 code and just made it able to remember the last winning one. I also had to add a boolean to check if the board had already won. I was happy that I didn't have to change too much, because this one took quite a while to do. Is this code perfect? Probably far from it, but I don't feel the need to revisit this one for refactoring.
