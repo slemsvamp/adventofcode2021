@@ -15,6 +15,9 @@ I compile with **Microsoft (R) C/C++ Optimizing Compiler Version 19.29.30038.1 f
 cl -MT -nologo -Gm- -GR- -EHa- -Od -Oi -WX -W4 -wd4100 -FC -Z7 -D_CRT_SECURE_NO_WARNINGS day01.cpp /link -opt:ref user32.lib
 ```
 
+# Diary
+A small note is that any day title with an asterisk is marked as a day I will have to revisit and refactor, because I was likely unhappy with the solution or structure.
+
 ## Day 01
 
 There's not too much to say about day one. I can definitely feel that I would have solved this faster using trusty old C#. I had to learn the hard way that `strtok` mutates the data you're tokenizing by placing a null character where the delimiter is found, but once I got past that debacle I had no real hurdles.
@@ -22,3 +25,8 @@ There's not too much to say about day one. I can definitely feel that I would ha
 ## Day 02
 
 Quite a simple day, I think this one took about five minutes, funnily enough this one went a lot quicker than yesterday's problem.
+
+## Day 03 *
+Ok, bare with me. The solution I'm currently comitting isn't exactly what I hoped it would be. I definitely know that my C# solution would have been a lot fancier, but I want to see that as me being in need of practice.
+
+I was tempted to write the main function as `Part2(Part1())` and skip the whole `u32 length = Part1()` but I couldn't really allow myself. ;)

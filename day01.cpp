@@ -4,7 +4,8 @@
 
 #include "common.h"
 
-void Part1()
+void
+Part1()
 {
     u32 depthCompare = 0;
     u32 increases = 0; 
@@ -24,7 +25,8 @@ void Part1()
     DebugLog("Result Part 1: %d\n", increases);
 }
 
-void Part2()
+void
+Part2()
 {
     u32 depths[3] = {0, 0, 0};
     u32 depthCompare = 0;
@@ -57,7 +59,8 @@ void Part2()
     DebugLog("Result Part 2: %d\n", increases);
 }
 
-int32_t main(s32 argumentCount, char *arguments[])
+u32
+main(s32 argumentCount, char *arguments[])
 {
     Part1();
     Part2();

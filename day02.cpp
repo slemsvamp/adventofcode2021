@@ -4,7 +4,8 @@
 
 #include "common.h"
 
-void Part1()
+void
+Part1()
 {
     file_data data = ReadToEndOfFile("input\\day02-input1.txt");
 
@@ -29,7 +30,8 @@ void Part1()
     DebugLog("Result Part 1: %d\n", result);
 }
 
-void Part2()
+void
+Part2()
 {
     file_data data = ReadToEndOfFile("input\\day02-input1.txt");
 
@@ -59,7 +61,8 @@ void Part2()
     DebugLog("Result Part 2: %d\n", result);
 }
 
-int32_t main(s32 argumentCount, char *arguments[])
+u32
+main(s32 argumentCount, char *arguments[])
 {
     Part1();
     Part2();
