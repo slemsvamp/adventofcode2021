@@ -255,7 +255,8 @@ Part2()
     DebugLog("Result Part 2: %d\n", sum);
 }
 
-u32 main(s32 argumentCount, char *arguments[])
+u32
+main(s32 argumentCount, char *arguments[])
 {
     Part1();
     Part2();

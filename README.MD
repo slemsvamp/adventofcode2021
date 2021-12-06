@@ -18,6 +18,8 @@ cl -MT -nologo -Gm- -GR- -EHa- -Od -Oi -WX -W4 -wd4100 -FC -Z7 -D_CRT_SECURE_NO_
 # Diary
 A small note is that any day title with an asterisk is marked as a day I will have to revisit and refactor, because I was likely unhappy with the solution or structure.
 
+NOTE: To be clear, don't read these notes if you don't expect spoilers. Since you're here to maybe check code, I'm sure that's not your worry - but I figure I'd atleast be kind and warn you that I'm discussing how I might have come about the solution or similar.
+
 ## Day 01
 
 There's not too much to say about day one. I can definitely feel that I would have solved this faster using trusty old C#. I had to learn the hard way that `strtok` mutates the data you're tokenizing by placing a null character where the delimiter is found, but once I got past that debacle I had no real hurdles.
@@ -38,3 +40,6 @@ The second part of today's task was pretty quick, I copied the Part1 code and ju
 
 ## Day 05 *
 Oh, there's something to unpack here. I know how this looks. It looks bad. This is all pretty slow, and the culprit is extremely likely that I check through every key in the hack I call `dictionary`. This could ofcourse be sped up immensly by making the key lookup more efficient. I don't use any libraries, so I can't just "cheat" my way here, so what I figure I'll do is to revisit this one and rewrite it to use some more reasonable way of finding keys quicker. I already know how, but I didn't want to put the effort in at the time of comitting this to git.
+
+## Day 06
+This one was a pretty straight forward one, I think I saw the need to just throw it all into a "dictionary" and just play with the numbers. A typical red herring where you're lead to believe that handling every fish as its own entity/object might be a good idea, but it's just numbers. If you do want every fish to have individual weight, is where some problems arise. You see this in games when you might have many of one type of item, but what if they have different health values or slightly different wear and tear, all of a sudden you can't just say you have X of these items - atleast as easily. In this case we weren't tested on that part, instead we were tested by part 2 that we had already chosen a scalable approach.
