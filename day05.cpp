@@ -4,24 +4,24 @@
 
 #include "common.h"
 
-struct key_value_pair
-{
-    u32 Key;
-    u32 Value;
-};
-
-struct dictionary
-{
-    key_value_pair *KeyValuePairs;
-    u32 Count;
-};
-
 struct line
 {
     u16 FromX;
     u16 FromY;
     u16 ToX;
     u16 ToY;
+};
+
+struct node
+{
+    u32 Hash;
+    node *Next;
+};
+
+struct get_vents_result
+{
+    line *Vents;
+    u32 Count;
 };
 
 internal u32
@@ -68,12 +68,6 @@ GetVent(char **playheadAddress)
 
     return result;
 }
-
-struct get_vents_result
-{
-    line *Vents;
-    u32 Count;
-};
 
 internal get_vents_result
 GetVents(file_data file, u32 count, b8 orthogonalOnly)
@@ -131,15 +125,48 @@ SwapVentX(line vent)
 }
 
 internal void
+Add(u16 y, u16 x, u32 *dict, node **hashes)
+{
+    u32 hash = y * 1000 + x;
+    u32 *value = dict + hash;
+
+    if (!*value)
+        *value = 1;
+    else
+    {
+        if (!*hashes)
+        {
+            node *addNode = (node *)malloc(sizeof(node));
+            addNode->Hash = hash;
+            addNode->Next = NULL;
+            *hashes = addNode;
+        }
+        else
+        {
+            node *hashed = *hashes;
+            while (hashed && hashed->Next)
+            {
+                if (hashed->Hash == hash)
+                    return;
+                hashed = hashed->Next;
+            }
+            node *addNode = (node *)malloc(sizeof(node));
+            addNode->Hash = hash;
+            addNode->Next = NULL;
+            hashed->Next = addNode;
+        }
+    }
+}
+
+internal void
 Part1()
 {
     file_data file = ReadToEndOfFile("input\\day05-input1.txt");
     u32 count = CountVents(file);
     get_vents_result getVentsResult = GetVents(file, count, true);
 
-    dictionary dict = {};
-    dict.KeyValuePairs = (key_value_pair *)malloc(sizeof(key_value_pair) * 1000000);
-    dict.Count = 0;
+    u32 *dict = (u32 *)calloc(1000000, sizeof(u32));
+    node *nodes = NULL;
 
     for (u32 ventIndex = 0; ventIndex < getVentsResult.Count; ventIndex++)
     {
@@ -148,68 +175,23 @@ Part1()
         if (vent.FromY > vent.ToY)
             vent = SwapVentY(vent);
 
+        if (vent.FromX > vent.ToX)
+            vent = SwapVentX(vent);
+
         for (u16 ventY = vent.FromY; ventY <= vent.ToY; ventY++)
-        {
-            if (vent.FromX > vent.ToX)
-                vent = SwapVentX(vent);
-
             for (u16 ventX = vent.FromX; ventX <= vent.ToX; ventX++)
-            {
-                u32 ventId = ventY * 1000 + ventX;
-                b8 found = false;
-
-                for (u32 kvpIndex = 0; kvpIndex < dict.Count; kvpIndex++)
-                {
-                    key_value_pair kvp = *(dict.KeyValuePairs + kvpIndex);
-
-                    if (kvp.Key == ventId)
-                    {
-                        found = true;
-                        (dict.KeyValuePairs + kvpIndex)->Value++;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    *(dict.KeyValuePairs + dict.Count) = { ventId, 1 };
-                    dict.Count++;
-                }
-            }
-        }
+                Add(ventY, ventX, dict, &nodes);
     }
 
     u32 sum = 0;
 
-    for (u32 kvpIndex = 0; kvpIndex < dict.Count; kvpIndex++)
-        if ((dict.KeyValuePairs + kvpIndex)->Value >= 2)
-            sum++;
+    while (nodes)
+    {
+        sum++;
+        nodes = nodes->Next;
+    }
 
     DebugLog("Result Part 1: %d\n", sum);
-}
-
-internal void
-AddToDictionary(u32 ventY, u32 ventX, dictionary *dict)
-{
-    u32 ventId = ventY * 1000 + ventX;
-    b8 found = false;
-
-    for (u32 kvpIndex = 0; kvpIndex < dict->Count; kvpIndex++)
-    {
-        key_value_pair kvp = *(dict->KeyValuePairs + kvpIndex);
-        if (kvp.Key == ventId)
-        {
-            found = true;
-            (dict->KeyValuePairs + kvpIndex)->Value++;
-            break;
-        }
-    }
-
-    if (!found)
-    {
-        *(dict->KeyValuePairs + dict->Count) = {ventId, 1};
-        dict->Count++;
-    }
 }
 
 internal void
@@ -219,9 +201,8 @@ Part2()
     u32 count = CountVents(file);
     get_vents_result getVentsResult = GetVents(file, count, false);
 
-    dictionary dict = {};
-    dict.KeyValuePairs = (key_value_pair *)malloc(sizeof(key_value_pair) * 1000000);
-    dict.Count = 0;
+    u32 *dict = (u32 *)calloc(1000000, sizeof(u32));
+    node *nodes = NULL;
 
     for (u32 ventIndex = 0; ventIndex < getVentsResult.Count; ventIndex++)
     {
@@ -235,21 +216,22 @@ Part2()
 
         if (stepY == 0)
             for (u16 ventX = vent.FromX; ventX != vent.ToX; ventX += stepX)
-                AddToDictionary(vent.FromY, ventX, &dict);
+                Add(vent.FromY, ventX, dict, &nodes);
         else if (stepX == 0)
             for (u16 ventY = vent.FromY; ventY != vent.ToY; ventY += stepY)
-                AddToDictionary(ventY, vent.FromX, &dict);
+                Add(ventY, vent.FromX, dict, &nodes);
         else
             for (u16 ventY = vent.FromY, ventX = vent.FromX; ventY != vent.ToY && ventX != vent.ToX; ventY += stepY, ventX += stepX)
-                AddToDictionary(ventY, ventX, &dict);
-        AddToDictionary(vent.ToY, vent.ToX, &dict);
+                Add(ventY, ventX, dict, &nodes);
+        Add(vent.ToY, vent.ToX, dict, &nodes);
     }
 
     u32 sum = 0;
-    for (u32 kvpIndex = 0; kvpIndex < dict.Count; kvpIndex++)
+
+    while (nodes)
     {
-        if ((dict.KeyValuePairs + kvpIndex)->Value >= 2)
-            sum++;
+        sum++;
+        nodes = nodes->Next;
     }
 
     DebugLog("Result Part 2: %d\n", sum);
