@@ -45,43 +45,6 @@ Parse(file_data file)
     return result;
 }
 
-internal void
-Swap(u32 *one, u32 *other)
-{
-    u32 temp = *one;
-    *one = *other;
-    *other = temp;
-}
-
-internal u32
-Partition(u32 *values, s32 low, s32 high) 
-{ 
-    u32 pivot = *(values + high);
-    s32 lowerIndex = (low - 1);
-
-    for (u32 index = low; index <= high - 1; index++)
-    {
-        if (*(values + index) < pivot)
-        {
-            lowerIndex++;
-            Swap(values + lowerIndex, values + index);
-        }
-    }
-    Swap(values + lowerIndex + 1, values + high);
-    return lowerIndex + 1;
-} 
-
-internal void
-QuickSort(u32 *values, s32 low, s32 high)
-{
-    if (low < high)
-    { 
-        u32 partitionIndex = Partition(values, low, high); 
-        QuickSort(values, low, partitionIndex - 1); 
-        QuickSort(values, partitionIndex + 1, high); 
-    } 
-}
-
 internal u32
 CalculateTotalCost(u32 halfWay, u32 *values, u32 count, b8 constantRate)
 {
@@ -117,7 +80,7 @@ Part1()
     file_data file = ReadToEndOfFile("input\\day07-input1.txt");
     parse_result parseResult = Parse(file);
 
-    QuickSort(parseResult.Values, 0, parseResult.Count - 1);
+    QS_Sort(parseResult.Values, 0, parseResult.Count - 1);
 
     u32 lastCost = CalculateTotalCost(0, parseResult.Values, parseResult.Count, true);
 
@@ -141,7 +104,7 @@ Part2()
     file_data file = ReadToEndOfFile("input\\day07-input1.txt");
     parse_result parseResult = Parse(file);
 
-    QuickSort(parseResult.Values, 0, parseResult.Count - 1);
+    QS_Sort(parseResult.Values, 0, parseResult.Count - 1);
 
     u32 lastCost = CalculateTotalCost(0, parseResult.Values, parseResult.Count, false);
 
