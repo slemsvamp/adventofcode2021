@@ -74,7 +74,7 @@ CalculateTotalCost(u32 halfWay, u32 *values, u32 count, b8 constantRate)
     return result;
 }
 
-internal void
+internal u32
 Part1()
 {
     file_data file = ReadToEndOfFile("input\\day07-input1.txt");
@@ -89,16 +89,13 @@ Part1()
         u32 cost = CalculateTotalCost(index, parseResult.Values, parseResult.Count, true);
 
         if (cost > lastCost)
-        {
-            DebugLog("Part 1 Cost: %d\n", lastCost);
-            return;
-        }
+            return lastCost;
         
         lastCost = cost;
     }
 }
 
-internal void
+internal u32
 Part2()
 {
     file_data file = ReadToEndOfFile("input\\day07-input1.txt");
@@ -113,10 +110,7 @@ Part2()
         u32 cost = CalculateTotalCost(index, parseResult.Values, parseResult.Count, false);
 
         if (cost > lastCost)
-        {
-            DebugLog("Part 2 Cost: %d\n", lastCost);
-            return;
-        }
+            return lastCost;
         
         lastCost = cost;
     }
@@ -125,8 +119,23 @@ Part2()
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    Part1();
-    Part2();
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    u32 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    u32 resultPart2 = Part2();
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 07 -\n");
+    DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %d (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }

@@ -2,6 +2,8 @@
 #define COMMON_H
 
 #include <stdint.h>
+#include <time.h>
+#include <windows.h>
 
 #define internal static
 #define local_persist static

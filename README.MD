@@ -52,3 +52,46 @@ This one was quite the nightmare to pull off with this C business I'm doing, not
 
 ## Day 09
 Nothing much to say, pretty easy and straight forward. Took about 20 minutes for the first part and 20 for the second part, mostly wrestling with C things that would as usual be faster for me to write in C#, but I'm pretty ok with this one. Upwards and onwards!
+
+# Benchmarks (approximates)
+I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
+
+In this current commit you can clearly see that Day 05 needs work.
+
+```
+- Day 01 -
+Result Part 1: 1559 (0 ms, 552562 cycles passed)
+Result Part 2: 1600 (0 ms, 448154 cycles passed)
+
+- Day 02 -
+Result Part 1: 2272262 (0 ms, 402934 cycles passed)
+Result Part 2: 2134882034 (0 ms, 301857 cycles passed)
+
+- Day 03 -
+Result Part 1: 12 (0 ms, 249292 cycles passed)
+Result Part 2: 6085575 (0 ms, 1771262 cycles passed)
+
+- Day 04 -
+Result Part 1: 8442 (0 ms, 736729 cycles passed)
+Result Part 2: 4590 (0 ms, 1310847 cycles passed)
+
+- Day 05 -
+Result Part 1: 6572 (39 ms, 115516746 cycles passed)
+Result Part 2: 21466 (607 ms, 1761207072 cycles passed)
+
+- Day 06 -
+Result Part 1: 356190 (0 ms, 306676 cycles passed)
+Result Part 2: 1617359101538 (0 ms, 158363 cycles passed)
+
+- Day 07 -
+Result Part 1: 345197 (0 ms, 914613 cycles passed)
+Result Part 2: 96361606 (0 ms, 1229731 cycles passed)
+
+- Day 08 -
+Result Part 1: 288 (0 ms, 1051050 cycles passed)
+Result Part 2: 940724 (1 ms, 3836910 cycles passed)
+
+- Day 09 -
+Result Part 1: 439 (0 ms, 1412260 cycles passed)
+Result Part 2: 900900 (1 ms, 1701717 cycles passed)
+```

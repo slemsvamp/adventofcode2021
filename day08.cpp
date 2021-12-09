@@ -101,7 +101,7 @@ CountAppearance(u32 segmentCount, parse_result parseResult)
     return result;
 }
 
-internal void
+internal u32
 Part1()
 {
     file_data file = ReadToEndOfFile("input\\day08-input1.txt");
@@ -114,7 +114,7 @@ Part1()
 
     u32 result = oneCount + fourCount + sevenCount + eightCount;
 
-    DebugLog("Result Part 1: %d\n", result);
+    return result;
 }
 
 internal char**
@@ -242,7 +242,7 @@ GetValueFromWireInformation(char **segmentInformation, wire_information *informa
     return result;
 }
 
-internal void
+internal u64
 Part2()
 {
     file_data file = ReadToEndOfFile("input\\day08-input1.txt");
@@ -269,10 +269,6 @@ Part2()
         char *middleSegment;
         char *topLeftSegment;
 
-        // by now we have 1, 4, 7, 8
-
-        DebugLog("topLeftAndMiddleSegment is %s\n", topLeftAndMiddleSegment);
-
         for (u32 digitIndex = 0; digitIndex < 3; digitIndex++)
         {
             char *candidateMiddleSegment = SubtractSegments(topLeftAndMiddleSegment, *(sixSegmentDigits + digitIndex));
@@ -281,15 +277,12 @@ Part2()
                 *(segmentInformation + 0) = *(sixSegmentDigits + digitIndex);
                 middleSegment = candidateMiddleSegment;
                 topLeftSegment = SubtractSegments(topLeftAndMiddleSegment, middleSegment);
-                DebugLog("middleSegment is %s\n", middleSegment);
-                DebugLog("thus topLeftSegment is %s\n", topLeftSegment);
                 break;
             }
         }
 
-        // by now we have 0, 1, 4, 7, 8
-
         b8 assignedFiveOrSix = false;
+
         for (u32 digitIndex = 0; digitIndex < 3; digitIndex++)
         {
             char *digit = *(sixSegmentDigits + digitIndex);
@@ -312,8 +305,6 @@ Part2()
             else
                 *(segmentInformation + 9) = digit;
         }
-
-        // by now we have 0, 1, 4, 6, 7, 8, 9
 
         char **fiveSegmentDigits = GetDigitsByCount(5, wireInformation); // 2, 3, 5
 
@@ -341,55 +332,32 @@ Part2()
 
         u32 value = GetValueFromWireInformation(segmentInformation, wireInformation);
 
-        DebugLog("Value: %d\n", value);
-
         sum += value;
-
-        DebugLog("------\n");
     }
 
- /*
-   0:      1:      2:      3:      4:
-  aaaa    ....    aaaa    aaaa    ....
- b    c  .    c  .    c  .    c  b    c
- b    c  .    c  .    c  .    c  b    c
-  ....    ....    dddd    dddd    dddd
- e    f  .    f  e    .  .    f  .    f
- e    f  .    f  e    .  .    f  .    f
-  gggg    ....    gggg    gggg    ....
- 
-   5:      6:      7:      8:      9:
-  aaaa    aaaa    aaaa    aaaa    aaaa
- b    .  b    .  .    c  b    c  b    c
- b    .  b    .  .    c  b    c  b    c
-  dddd    dddd    ....    dddd    dddd
- .    f  e    f  .    f  e    f  .    f
- .    f  e    f  .    f  e    f  .    f
-  gggg    gggg    ....    gggg    gggg
-*/
-
-    // digit 1 uses 2 segments X
-    // digit 7 uses 3 segments X
-    // digit 4 uses 4 segments X
-    
-    // digit 2 uses 5 segments
-    // digit 3 uses 5 segments
-    // digit 5 uses 5 segments
-    
-    // digit 0 uses 6 segments
-    // digit 6 uses 6 segments
-    // digit 9 uses 6 segments
-    
-    // digit 8 uses 7 segments X
-
-    DebugLog("Result Part 2: %lld\n", sum);
+    return sum;
 }
 
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    Part1();
-    Part2();
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    u32 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    u64 resultPart2 = Part2();
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 08 -\n");
+    DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %lld (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }

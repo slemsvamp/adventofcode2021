@@ -83,7 +83,7 @@ Parse(file_data file)
     return result;
 }
 
-internal void
+internal u64
 Part1()
 {
     const u32 simulateDays = 80;
@@ -92,10 +92,10 @@ Part1()
     parse_result parseResult = Parse(file);
     u64 numberOfFish = SimulateDays(simulateDays, parseResult.Values, parseResult.Count);
 
-    DebugLog("Result Part 1: %lld\n", numberOfFish);
+    return numberOfFish;
 }
 
-internal void
+internal u64
 Part2()
 {
     const u32 simulateDays = 256;
@@ -104,14 +104,29 @@ Part2()
     parse_result parseResult = Parse(file);
     u64 numberOfFish = SimulateDays(simulateDays, parseResult.Values, parseResult.Count);
 
-    DebugLog("Result Part 2: %lld\n", numberOfFish);
+    return numberOfFish;
 }
 
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    Part1();
-    Part2();
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    u64 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    u64 resultPart2 = Part2();
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 06 -\n");
+    DebugLog("Result Part 1: %lld (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %lld (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }

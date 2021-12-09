@@ -4,7 +4,7 @@
 
 #include "common.h"
 
-void
+internal u32
 Part1()
 {
     u32 depthCompare = 0;
@@ -22,10 +22,10 @@ Part1()
         lines = strtok(NULL, "\r\n");
     }
 
-    DebugLog("Result Part 1: %d\n", increases);
+    return increases;
 }
 
-void
+internal u32
 Part2()
 {
     u32 depths[3] = {0, 0, 0};
@@ -56,14 +56,29 @@ Part2()
         lines = strtok(NULL, "\r\n");
     }
 
-    DebugLog("Result Part 2: %d\n", increases);
+    return increases;
 }
 
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    Part1();
-    Part2();
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    s32 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    s32 resultPart2 = Part2();
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 01 -\n");
+    DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %d (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }

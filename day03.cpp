@@ -48,8 +48,6 @@ Part1()
 
     u64 powerConsumption = gammaRate * epsilonRate;
 
-    DebugLog("Result Part 1: %lld\n", powerConsumption);
-
     return length;
 }
 
@@ -113,7 +111,7 @@ ClearFilter(char *playhead, u32 bitIndex, u32 length, char keep, u32 size)
     return result;
 }
 
-internal void
+internal u64
 Part2(u32 length)
 {
     file_data file = ReadToEndOfFile("input\\day03-input1.txt");
@@ -125,7 +123,7 @@ Part2(u32 length)
 
     u32 remaining = 0xffffffff;
     char bit = 0;
-    // oxygen generator rating, bitCriteria = most
+
     for (u32 bitIndex = 0; bitIndex < length && remaining > 1; bitIndex++)
     {
         bit = NextSoughtValue(buffer, bitIndex, length, bit_criteria_most, fileSize);
@@ -134,7 +132,6 @@ Part2(u32 length)
     }
     
     u32 oxygenGeneratorRating = 0;
-    // find the remaining number from buffer and save it as oxygenGeneratorRating
     for (char *playhead = buffer; playhead - buffer < (u32)file.Size; playhead += length + 2)
         if (*playhead != 0)
         {
@@ -144,12 +141,10 @@ Part2(u32 length)
         }
 
 
-    // restore the buffer
     memcpy(buffer, file.Data, file.Size);
 
     remaining = 0xffffffff;
 
-    // scrubber rating, bitCriteria = least
     for (u32 bitIndex = 0; bitIndex < length && remaining > 1; bitIndex++)
     {
         bit = NextSoughtValue(buffer, bitIndex, length, bit_criteria_least, fileSize);
@@ -158,7 +153,7 @@ Part2(u32 length)
     }
 
     u32 scrubberRating = 0;
-    // find the remaining number from buffer and save it as scrubberRating
+
     for (char *playhead = buffer; playhead - buffer < (u32)file.Size; playhead += length + 2)
         if (*playhead != 0)
         {
@@ -171,15 +166,29 @@ Part2(u32 length)
  
     free(buffer);
 
-    DebugLog("Result Part 2: %lld\n", lifeSupportRating);
+    return lifeSupportRating;
 }
 
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    u32 length = Part1();
-    
-    Part2(length);
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    u32 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    u64 resultPart2 = Part2(resultPart1);
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 03 -\n");
+    DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %lld (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }

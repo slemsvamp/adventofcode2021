@@ -158,7 +158,7 @@ HasBoardWon(game_board *board)
     return 0;
 }
 
-internal void
+internal u32
 Part1()
 {
     file_data file = ReadToEndOfFile("input\\day04-input1.txt");
@@ -180,16 +180,13 @@ Part1()
                 for (u32 cellIndex = 0; cellIndex < 25; cellIndex++)
                     sum += *(board->Cell + cellIndex);
 
-                DebugLog("Part1: ");
-                DebugLog("Board with index %d has won, the sum is %d and last number was %d. ", boardIndex, sum, number);
-                DebugLog("%d * %d = %d\n", sum, number, sum * number);
-                return;
+                return sum * number;
             }
         }
     }
 }
 
-internal void
+internal u32
 Part2()
 {
     file_data file = ReadToEndOfFile("input\\day04-input1.txt");
@@ -222,16 +219,29 @@ Part2()
         }
     }
 
-    DebugLog("Part2: ");
-    DebugLog("Board with index %d has won, the sum is %d and last number was %d. ", lastBoard.BoardIndex, lastBoard.Sum, lastBoard.Number);
-    DebugLog("%d * %d = %d\n", lastBoard.Sum, lastBoard.Number, lastBoard.Sum * lastBoard.Number);
+    return lastBoard.Sum * lastBoard.Number;
 }
 
 u32
 main(s32 argumentCount, char *arguments[])
 {
-    Part1();
-    Part2();
+    clock_t startTime = clock();
+    u64 startCycles = __rdtsc();
+
+    u32 resultPart1 = Part1();
+
+    clock_t part1Time = clock();
+    u64 part1Cycles = __rdtsc();
+
+    u32 resultPart2 = Part2();
+
+    clock_t endTime = clock();
+    u64 endCycles = __rdtsc();
+
+    DebugLog("- Day 04 -\n");
+    DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 2: %d (%d ms, %lld cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
+    DebugLog("\n");
 
     return 0;
 }
