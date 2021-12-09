@@ -38,7 +38,7 @@ I'm already learning a thing or two about how I approach these problems compared
 
 The second part of today's task was pretty quick, I copied the Part1 code and just made it able to remember the last winning one. I also had to add a boolean to check if the board had already won. I was happy that I didn't have to change too much, because this one took quite a while to do. Is this code perfect? Probably far from it, but I don't feel the need to revisit this one for refactoring.
 
-## Day 05
+## Day 05 *
 When I made this the first time around I didn't bother making the lookups quicker. They are still not the quickest you can get, but it's several seconds faster now and I'll be happy with this. I don't think I'm revisiting this one, but if I am I'll be looking into making the lookup even faster with some algorithm. I also feel like I could skip the many mallocs we create with the linked values. We could simply throw them into a large allocated space instead. We'll see if I update. If you're interested in what I originally wrote on this readme.md on day 05 first time around check commit 5bc1d342e133 or before.
 
 ## Day 06
@@ -56,7 +56,7 @@ Nothing much to say, pretty easy and straight forward. Took about 20 minutes for
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
-In this current commit you can clearly see that Day 05 needs work.
+*Note: In this current commit you can clearly see that Day 05 needs work, so it gets an asterisk! Apparently Day 03 isn't running with low performance, but I still might go back to it.*
 
 ```
 - Day 01 -
