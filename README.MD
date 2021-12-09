@@ -49,3 +49,6 @@ I solved this one first by just iterating through the more exponential cost the 
 
 ## Day 08 *
 This one was quite the nightmare to pull off with this C business I'm doing, not using any classes. I definitely feel like I'm missing a lot of the usual tools but atleast I'm kind of getting a feel for every time I need to borrow some memory and understand that quite often a lot of things happen under the hood. Which ofcourse is a good thing, something usually managing all the stuff I don't necessarily want to muck around with - if I'm in a hurry. This one took an hour or two because writing all the pointer to pointer stuff, understanding the problem, thinking of what strategy I want to use to sus out the digits and some naming conventions. Speaking of, that's a mess I should clean up. I'm putting one of my asterisks down, and I'll look into maybe cleaning this mess up a bit.
+
+## Day 09
+Nothing much to say, pretty easy and straight forward. Took about 20 minutes for the first part and 20 for the second part, mostly wrestling with C things that would as usual be faster for me to write in C#, but I'm pretty ok with this one. Upwards and onwards!
