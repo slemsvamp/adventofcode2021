@@ -53,6 +53,9 @@ This one was quite the nightmare to pull off with this C business I'm doing, not
 ## Day 09
 Nothing much to say, pretty easy and straight forward. Took about 20 minutes for the first part and 20 for the second part, mostly wrestling with C things that would as usual be faster for me to write in C#, but I'm pretty ok with this one. Upwards and onwards!
 
+## Day 10
+I messed up for a little while not catching that I had done `while (playhead)` when I meant to write `while (*playhead)` which caused the playhead to go into the next line and start analyzing starting/closing characters. It got fixed within a minute or two, but it felt like the snag this time around, because everything else was kind of straight forward. I was considering making some sort of regular expression approach, but I figured that would be unnecessarily complex for this problem, so instead I went with a stack approach for the starting characters.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -94,4 +97,8 @@ Result Part 2: 940724 (1 ms, 3836910 cycles passed)
 - Day 09 -
 Result Part 1: 439 (0 ms, 1412260 cycles passed)
 Result Part 2: 900900 (1 ms, 1701717 cycles passed)
+
+- Day 10 -
+Result Part 1: 394647 (0 ms, 457890 cycles passed)
+Result Part 2: 2380061249 (0 ms, 360429 cycles passed)
 ```

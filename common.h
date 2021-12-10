@@ -106,6 +106,14 @@ Swap(u32 *one, u32 *other)
     *other = temp;
 }
 
+internal void
+Swap(u64 *one, u64 *other)
+{
+    u64 temp = *one;
+    *one = *other;
+    *other = temp;
+}
+
 internal u32
 QS_Partition(u32 *values, s32 low, s32 high) 
 { 
@@ -122,10 +130,39 @@ QS_Partition(u32 *values, s32 low, s32 high)
     }
     Swap(values + lowerIndex + 1, values + high);
     return lowerIndex + 1;
-} 
+}
+
+internal u64
+QS_Partition(u64 *values, s32 low, s32 high) 
+{ 
+    u64 pivot = *(values + high);
+    s32 lowerIndex = (low - 1);
+
+    for (u32 index = low; index <= high - 1; index++)
+    {
+        if (*(values + index) < pivot)
+        {
+            lowerIndex++;
+            Swap(values + lowerIndex, values + index);
+        }
+    }
+    Swap(values + lowerIndex + 1, values + high);
+    return lowerIndex + 1;
+}
 
 internal void
 QS_Sort(u32 *values, s32 low, s32 high)
+{
+    if (low < high)
+    { 
+        u32 partitionIndex = QS_Partition(values, low, high); 
+        QS_Sort(values, low, partitionIndex - 1); 
+        QS_Sort(values, partitionIndex + 1, high); 
+    } 
+}
+
+internal void
+QS_Sort(u64 *values, s32 low, s32 high)
 {
     if (low < high)
     { 
