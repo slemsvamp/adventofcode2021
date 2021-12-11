@@ -106,6 +106,6 @@ Result Part 1: 394647 (0 ms, 457890 cycles passed)
 Result Part 2: 2380061249 (0 ms, 360429 cycles passed)
 
 - Day 11 -
-Result Part 1: 1613 (0 ms, 747768 cycles passed)
-Result Part 2: 510 (1 ms, 2485733 cycles passed)
+Result Part 1: 1613 (0 ms, 514184 cycles passed)
+Result Part 2: 510 (0 ms, 1360197 cycles passed)
 ```
