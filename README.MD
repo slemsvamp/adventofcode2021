@@ -56,6 +56,9 @@ Nothing much to say, pretty easy and straight forward. Took about 20 minutes for
 ## Day 10
 I messed up for a little while not catching that I had done `while (playhead)` when I meant to write `while (*playhead)` which caused the playhead to go into the next line and start analyzing starting/closing characters. It got fixed within a minute or two, but it felt like the snag this time around, because everything else was kind of straight forward. I was considering making some sort of regular expression approach, but I figured that would be unnecessarily complex for this problem, so instead I went with a stack approach for the starting characters.
 
+## Day 11
+So, this day started rough, quite a hangover from late night partying. Weirdly, that didn't help at all when it came to making octopi flash. I struggled a lot, and I kind of knew what I had to do but couldn't get my braincells to collide correctly. I eventually found that tiny little part that made everything constantly go wrong and off I went to problem part 2. I basically just added a check for the total of new flashes for one step be the same count as the number of octopi. I'm sure the idea is to bait you into thinking you have to do something more complex, but this made part 2 take about 20 seconds.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -101,4 +104,8 @@ Result Part 2: 900900 (1 ms, 1701717 cycles passed)
 - Day 10 -
 Result Part 1: 394647 (0 ms, 457890 cycles passed)
 Result Part 2: 2380061249 (0 ms, 360429 cycles passed)
+
+- Day 11 -
+Result Part 1: 1613 (0 ms, 747768 cycles passed)
+Result Part 2: 510 (1 ms, 2485733 cycles passed)
 ```
