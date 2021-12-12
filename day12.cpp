@@ -127,43 +127,6 @@ Parse(file_data file)
     return result;
 }
 
-internal char*
-GenerateTraversalText(graph *cave, u32 *visitedCaves, u32 visitedCount)
-{
-    char buffer[4096] = {};
-    u32 count = 0;
-
-    for (u32 traversalIndex = 0; traversalIndex < visitedCount; traversalIndex++)
-    {
-        node traversed = *(cave->Nodes + *(visitedCaves + traversalIndex));
-        
-        if (traversed.Index == cave->StartIndex)
-        {
-            memcpy(buffer + count, "start", 5);
-            count += 5;
-        }
-        else if (traversed.Index == cave->EndIndex)
-        {
-            memcpy(buffer + count, "end", 3);
-            count += 3;
-        }
-        else
-        {
-            for (u32 characterIndex = 0; characterIndex < strlen(traversed.Name); characterIndex++)
-                *(buffer + count++) = *(traversed.Name + characterIndex);
-        }
-
-        if (traversalIndex != visitedCount - 1)
-            *(buffer + count++) = ',';
-    }
-
-    char *result = (char *)malloc(count + 1);
-    memcpy(result, buffer, count);
-    *(result + count) = 0;
-
-    return result;
-}
-
 internal u32
 Traverse(graph *cave, node from, node end, u32 *visitedCaves, u32 visitedCount, b8 allowVisitingSmallCavesTwice, b8 visitedTwice)
 {
@@ -176,7 +139,6 @@ Traverse(graph *cave, node from, node end, u32 *visitedCaves, u32 visitedCount, 
 
     Assert(visitedCount < 30);
 
-    // NOTE: i'd prefer a faster way than iterating through all these, maybe that nodes have a list of their edges, but for development speed i sacrificed it
     for (u32 edgeIndex = 0; edgeIndex < cave->EdgeCount; edgeIndex++)
     {
         edge dg = *(cave->Edges + edgeIndex);
