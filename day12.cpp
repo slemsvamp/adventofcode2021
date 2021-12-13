@@ -210,7 +210,7 @@ Traverse(graph *cave, node from, node end, u32 *visitedCaves, u32 visitedCount, 
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day12-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day12-input.txt");
     graph cave = Parse(file);
 
     node start = *(cave.Nodes + cave.StartIndex);
@@ -225,7 +225,7 @@ Part1()
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day12-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day12-input.txt");
     graph cave = Parse(file);
 
     node start = *(cave.Nodes + cave.StartIndex);

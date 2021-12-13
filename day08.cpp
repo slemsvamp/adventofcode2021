@@ -104,7 +104,7 @@ CountAppearance(u32 segmentCount, parse_result parseResult)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day08-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day08-input.txt");
     parse_result parseResult = Parse(file);
 
     u32 oneCount = CountAppearance(2, parseResult);
@@ -245,7 +245,7 @@ GetValueFromWireInformation(char **segmentInformation, wire_information *informa
 internal u64
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day08-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day08-input.txt");
     parse_result parseResult = Parse(file);
 
     u64 sum = 0;

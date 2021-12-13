@@ -7,7 +7,7 @@
 internal s32
 Part1()
 {
-    file_data data = ReadToEndOfFile("input\\day02-input1.txt");
+    file_data data = ReadToEndOfFile("input\\day02-input.txt");
 
     s32 depth = 0;
     s32 horizontal = 0;
@@ -31,7 +31,7 @@ Part1()
 internal s32
 Part2()
 {
-    file_data data = ReadToEndOfFile("input\\day02-input1.txt");
+    file_data data = ReadToEndOfFile("input\\day02-input.txt");
 
     s32 depth = 0;
     s32 horizontal = 0;

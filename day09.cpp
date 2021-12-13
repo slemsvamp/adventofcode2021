@@ -64,7 +64,7 @@ Parse(file_data file)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day09-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day09-input.txt");
     vent_map ventMap = Parse(file);
     size mapSize = ventMap.Size;
 
@@ -159,7 +159,7 @@ Explore(u32 index, u8 *closed, vent_map ventMap, u32 *sum)
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day09-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day09-input.txt");
     vent_map ventMap = Parse(file);
     size mapSize = ventMap.Size;
 

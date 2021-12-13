@@ -112,7 +112,7 @@ CheckSimpleCorruption(char *line)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day10-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day10-input.txt");
 
     char *line = strtok(file.Data, "\r\n");
     u32 sum = 0;
@@ -132,7 +132,7 @@ Part1()
 internal u64
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day10-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day10-input.txt");
 
     char *line = strtok(file.Data, "\r\n");
     u64 *scores = (u64 *)calloc(110, sizeof(u64));

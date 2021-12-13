@@ -14,7 +14,7 @@ enum bit_criteria
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day03-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day03-input.txt");
     char *playhead = file.Data;
 
     char *fileDataIndex = file.Data;
@@ -114,7 +114,7 @@ ClearFilter(char *playhead, u32 bitIndex, u32 length, char keep, u32 size)
 internal u64
 Part2(u32 length)
 {
-    file_data file = ReadToEndOfFile("input\\day03-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day03-input.txt");
     u32 fileSize = (u32)file.Size;
 
     char *buffer = (char *)malloc(file.Size);

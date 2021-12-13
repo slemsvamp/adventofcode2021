@@ -10,7 +10,7 @@ Part1()
     u32 depthCompare = 0;
     u32 increases = 0; 
     
-    file_data data = ReadToEndOfFile("input\\day01-input1.txt");
+    file_data data = ReadToEndOfFile("input\\day01-input.txt");
 
     char *lines = strtok(data.Data, "\r\n");
     while (lines != NULL)
@@ -33,7 +33,7 @@ Part2()
     u32 linePlayhead = 0;
     u32 increases = 0;
 
-    file_data data = ReadToEndOfFile("input\\day01-input1.txt");
+    file_data data = ReadToEndOfFile("input\\day01-input.txt");
 
     char *lines = strtok(data.Data, "\r\n");
     while (lines != NULL)

@@ -152,7 +152,7 @@ ProcessStep(u32 step, octopi_map *map)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day11-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day11-input.txt");
     octopi_map map = Parse(file);
 
     u32 result = 0;
@@ -169,7 +169,7 @@ Part1()
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day11-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day11-input.txt");
 
     octopi_map map = Parse(file);
 

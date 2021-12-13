@@ -88,7 +88,7 @@ Part1()
 {
     const u32 simulateDays = 80;
 
-    file_data file = ReadToEndOfFile("input\\day06-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day06-input.txt");
     parse_result parseResult = Parse(file);
     u64 numberOfFish = SimulateDays(simulateDays, parseResult.Values, parseResult.Count);
 
@@ -100,7 +100,7 @@ Part2()
 {
     const u32 simulateDays = 256;
 
-    file_data file = ReadToEndOfFile("input\\day06-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day06-input.txt");
     parse_result parseResult = Parse(file);
     u64 numberOfFish = SimulateDays(simulateDays, parseResult.Values, parseResult.Count);
 

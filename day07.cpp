@@ -77,7 +77,7 @@ CalculateTotalCost(u32 halfWay, u32 *values, u32 count, b8 constantRate)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day07-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day07-input.txt");
     parse_result parseResult = Parse(file);
 
     QS_Sort(parseResult.Values, 0, parseResult.Count - 1);
@@ -98,7 +98,7 @@ Part1()
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day07-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day07-input.txt");
     parse_result parseResult = Parse(file);
 
     QS_Sort(parseResult.Values, 0, parseResult.Count - 1);

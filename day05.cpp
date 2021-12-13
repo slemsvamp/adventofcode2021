@@ -161,7 +161,7 @@ Add(u16 y, u16 x, u32 *dict, node **hashes)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day05-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day05-input.txt");
     u32 count = CountVents(file);
     get_vents_result getVentsResult = GetVents(file, count, true);
 
@@ -197,7 +197,7 @@ Part1()
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day05-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day05-input.txt");
     u32 count = CountVents(file);
     get_vents_result getVentsResult = GetVents(file, count, false);
 

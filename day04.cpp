@@ -161,7 +161,7 @@ HasBoardWon(game_board *board)
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\day04-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day04-input.txt");
 
     game_setup gameSetup = GetGameSetup(file);
 
@@ -189,7 +189,7 @@ Part1()
 internal u32
 Part2()
 {
-    file_data file = ReadToEndOfFile("input\\day04-input1.txt");
+    file_data file = ReadToEndOfFile("input\\day04-input.txt");
 
     game_setup gameSetup = GetGameSetup(file);
 

@@ -169,7 +169,7 @@ Part1()
 }
 
 internal void
-Print(parse_result parseResult)
+PrintParseResult(parse_result parseResult)
 {
     u32 rows = parseResult.Y.Max + 1;
     u32 columns = parseResult.X.Max + 1;
@@ -226,7 +226,7 @@ u32 main(s32 argumentCount, char *arguments[])
     DebugLog("- Day 13 -\n");
     DebugLog("Result Part 1: %d (%d ms, %lld cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
     DebugLog("Result Part 2:\n");
-    Print(resultPart2);
+    PrintParseResult(resultPart2);
     DebugLog("(%d ms, %lld cycles passed)\n", (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
     DebugLog("\n");
 
