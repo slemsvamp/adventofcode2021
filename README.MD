@@ -1,7 +1,7 @@
 # Advent of Code 2021 in C/C++
 
 ## Introduction
-I'm doing this year's AoC in C/C++ which, despite my age, is fairly new to me. I primarily started with BASIC and moved onto C# when I was younger and never ventured into the land of pointers. There are many things I have yet to learn when it comes to how to structure and use the language fully to my own liking, but that's exactly what this exercise is about. I love doing AoC so why not also while learning something new.
+I'm doing this year's AoC in C (compiled as C++) which, despite my age, is fairly new to me. I primarily started with BASIC and moved onto C# when I was younger and never ventured into the land of pointers. There are many things I have yet to learn when it comes to how to structure and use the language fully to my own liking, but that's exactly what this exercise is about. I love doing AoC so why not also while learning something new.
 
 I've been inspired by the likes of Casey Muratori (github.com/cmuratori) and his project Handmade Hero (a series where he teaches how to code a game from scratch using no libraries) is what started my adventure into C/C++ with a barebones kind of approach.
 
@@ -16,19 +16,17 @@ cl -MT -nologo -Gm- -GR- -EHa- -Od -Oi -WX -W4 -wd4100 -FC -Z7 -D_CRT_SECURE_NO_
 ```
 
 # Diary
-A small note is that any day title with an asterisk is marked as a day I will have to revisit and refactor, because I was likely unhappy with the solution or structure.
+A small note is that any day title with an asterisk is marked as a day I might revisit and refactor, because I was likely unhappy with the solution or part of it.
 
 NOTE: To be clear, don't read these notes if you don't expect spoilers. Since you're here to maybe check code, I'm sure that's not your worry - but I figure I'd atleast be kind and warn you that I'm discussing how I might have come about the solution or similar.
 
 ## Day 01
-
 There's not too much to say about day one. I can definitely feel that I would have solved this faster using trusty old C#. I had to learn the hard way that `strtok` mutates the data you're tokenizing by placing a null character where the delimiter is found, but once I got past that debacle I had no real hurdles.
 
 ## Day 02
-
 Quite a simple day, I think this one took about five minutes, funnily enough this one went a lot quicker than yesterday's problem.
 
-## Day 03 *
+## Day 03
 Ok, bare with me. The solution I'm currently comitting isn't exactly what I hoped it would be. I definitely know that my C# solution would have been a lot fancier, but I want to see that as me being in need of practice.
 
 I was tempted to write the main function as `Part2(Part1())` and skip the whole `u32 length = Part1()` but I couldn't really allow myself. ;)
@@ -68,7 +66,7 @@ This one went pretty fast and steady, no real surprises in how to handle the sit
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
-*Note: In this current commit you can clearly see that Day 05 needs work, so it gets an asterisk! Apparently Day 03 isn't running with low performance, but I still might go back to it.*
+*Note: In this current commit you can clearly see that Day 05 needs work, so it gets an asterisk!*
 
 ```
 - Day 01 -
