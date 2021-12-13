@@ -62,6 +62,9 @@ So, this day started rough, quite a hangover from late night partying. Weirdly, 
 ## Day 12 *
 Oh dear, oh dear. I almost don't want to admit how long time I spent just figuring out what way I wanted to parse this. It would seem pretty easy and all that, but I couldn't decide if I wanted to just throw down a few arrays or pointers and allocate large buffers or actually count the necessary edges and nodes I might be adding. In the end I'll say that I chose a bit of a *"get things done"* approach. I will mark this one with an asterisk because I should probably revisit this and clean up some of the memoryleaks and maybe even less assumptions on the size. It's convenient to look at the input and see that no names are larger than two letters except *"start"* and *"end"* so I shamefully threw in a char Name[2] in the node struct. But hey, there's atleast some point in just being able to finish the problem! This text might change in the future when I rework the graph/node stuff.
 
+## Day 13
+This one went pretty fast and steady, no real surprises in how to handle the situation. I'd love to have used some good hashset for coordinates, but I ended up throwing "a lot of" memory at it instead. I figure it's something like 1300*1300, so approx 1690 kB of memory on the first fold, which is halfed by the next fold to 845 kB. So, fair warning, if you're running day 13's code, be ready to throw an extra stick of RAM in there, coz this baby is gonna demand almost 1.7 megabytes of memory.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -115,4 +118,15 @@ Result Part 2: 510 (0 ms, 1360197 cycles passed)
 - Day 12 -
 Result Part 1: 4378 (2 ms, 8440097 cycles passed)
 Result Part 2: 133621 (92 ms, 266048121 cycles passed)
+
+- Day 13 -
+Result Part 1: 827 (0 ms, 1351334 cycles passed)
+Result Part 2:
+####  ##  #  # #  # ###  ####  ##  ###
+#    #  # #  # # #  #  # #    #  # #  #
+###  #  # #### ##   #  # ###  #    #  #
+#    #### #  # # #  ###  #    #    ###
+#    #  # #  # # #  # #  #    #  # #
+#### #  # #  # #  # #  # ####  ##  #
+(1 ms, 1891052 cycles passed)
 ```
