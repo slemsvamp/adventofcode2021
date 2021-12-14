@@ -20,6 +20,7 @@ struct pair_occurrence
 
 struct parse_result
 {
+    char LastElement;
     pair_occurrence *Occurrences;
     insertion_rule *Rules;
     u32 RuleCount;
@@ -80,40 +81,37 @@ Parse(file_data file)
         }
     }
 
+    result.LastElement = *(polymer + polymerTemplateLength - 1);
+
     return result;
 }
 
 internal u64
-Analyze(pair_occurrence *pairs, u32 ruleCount)
+Analyze(pair_occurrence *pairs, u32 ruleCount, char lastElement)
 {
     u32 elementsSize = 'Z' - 'A' + 1;
-    
+    u64 minQuantity = 0xffffffffffffffff;
+    u64 maxQuantity = 0;
     u64 *elements = (u64 *)calloc(elementsSize, sizeof(u64));
 
     for (u32 occurrenceIndex = 0; occurrenceIndex < ruleCount; occurrenceIndex++)
     {
         pair_occurrence occurrence = *(pairs + occurrenceIndex);
-
-        char elementA = occurrence.Pair[0];
-        char elementB = occurrence.Pair[1];
-
-        u32 indexA = elementA - 'A';
-        u32 indexB = elementB - 'A';
-
-        *(elements + indexA) += occurrence.Quantity;
-        *(elements + indexB) += occurrence.Quantity;
+        *(elements + occurrence.Pair[0] - 'A') += occurrence.Quantity;
     }
 
-    u64 minQuantity = 0xffffffffffffffff;
-    u64 maxQuantity = 0;
+    (*(elements + lastElement - 'A'))++;
 
     for (u32 index = 0; index < elementsSize; index++)
     {
-        u64 value = (*(elements + index) + 1) / 2;
+        u64 value = *(elements + index);
         if (value == 0) continue;
         if (value > maxQuantity) maxQuantity = value;
         if (value < minQuantity) minQuantity = value;
     }
+
+    // I'll be honest, this isn't needed, if you have more than 1 element present, but..
+    if (minQuantity == 0xffffffffffffffff) minQuantity = 0;
 
     return maxQuantity - minQuantity;
 }
@@ -187,7 +185,7 @@ Part1()
     for (u32 count = 0; count < 10; count++)
         occurrences = Sequence(occurrences, parseResult.Rules, parseResult.RuleCount);
 
-    u64 result = Analyze(occurrences, parseResult.RuleCount);
+    u64 result = Analyze(occurrences, parseResult.RuleCount, parseResult.LastElement);
     
     return result;
 }
@@ -203,7 +201,7 @@ Part2()
     for (u32 count = 0; count < 40; count++)
         occurrences = Sequence(occurrences, parseResult.Rules, parseResult.RuleCount);
 
-    u64 result = Analyze(occurrences, parseResult.RuleCount);
+    u64 result = Analyze(occurrences, parseResult.RuleCount, parseResult.LastElement);
 
     return result;
 }

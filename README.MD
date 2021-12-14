@@ -132,6 +132,6 @@ Result Part 2:
 (1 ms, 1891052 cycles passed)
 
 - Day 14 -
-Result Part 1: 2621 (0 ms, 581456 cycles passed)
-Result Part 2: 2843834241366 (0 ms, 1599126 cycles passed)
+Result Part 1: 2621 (0 ms, 590978 cycles passed)
+Result Part 2: 2843834241366 (0 ms, 1590043 cycles passed)
 ```
