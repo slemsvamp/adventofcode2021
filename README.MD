@@ -63,6 +63,9 @@ Oh dear, oh dear. I almost don't want to admit how long time I spent just figuri
 ## Day 13
 This one went pretty fast and steady, no real surprises in how to handle the situation. I'd love to have used some good hashset for coordinates, but I ended up throwing "a lot of" memory at it instead. I figure it's something like 1300*1300, so approx 1690 kB of memory on the first fold, which is halfed by the next fold to 845 kB. So, fair warning, if you're running day 13's code, be ready to throw an extra stick of RAM in there, coz this baby is gonna demand almost 1.7 megabytes of memory.
 
+## Day 14
+Oh dear, this one was not fun. I was SO absolutely sure that "hey, i know this, this is linked list stuff, I'm gonna get two stars quick today", and that ofcourse bit me hard. I updated my loop count to 40 and smiled, then I ran it and noticed that it's not giving me an answer. A few more checks and I realized that "oh no, this is not what i was meant to do". I realized that I have to rework things, and with the approach I've chosen it meant a lot of code had to go. I am going to LOVE going back to something like C# to solve these things, or atleast use one or two libraries in C++ for dictionaries and what not. Anyway, I realized later that I have to kind of do the "dictionary"-approach to this one since every known pairing creates two new pairings. This solution doesn't care to reproduce the exact polymer, only what it consists of, which I think is why I thought a linked list would be good. Enough rambling.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -127,4 +130,8 @@ Result Part 2:
 #    #  # #  # # #  # #  #    #  # #
 #### #  # #  # #  # #  # ####  ##  #
 (1 ms, 1891052 cycles passed)
+
+- Day 14 -
+Result Part 1: 2621 (0 ms, 581456 cycles passed)
+Result Part 2: 2843834241366 (0 ms, 1599126 cycles passed)
 ```
