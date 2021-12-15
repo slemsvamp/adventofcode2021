@@ -66,6 +66,9 @@ This one went pretty fast and steady, no real surprises in how to handle the sit
 ## Day 14
 Oh dear, this one was not fun. I was SO absolutely sure that "hey, i know this, this is linked list stuff, I'm gonna get two stars quick today", and that ofcourse bit me hard. I updated my loop count to 40 and smiled, then I ran it and noticed that it's not giving me an answer. A few more checks and I realized that "oh no, this is not what i was meant to do". I realized that I have to rework things, and with the approach I've chosen it meant a lot of code had to go. I am going to LOVE going back to something like C# to solve these things, or atleast use one or two libraries in C++ for dictionaries and what not. Anyway, I realized later that I have to kind of do the "dictionary"-approach to this one since every known pairing creates two new pairings. This solution doesn't care to reproduce the exact polymer, only what it consists of, which I think is why I thought a linked list would be good. Enough rambling.
 
+## Day 15
+Ok, I know I could speed this one up by using minheaps or priorityqueues and what not, but I think this is good enough. It's a bit slow for my taste but I had some weird issues with even printing the result. This is some bug I'm not entirely sure what the cause of is. I had to debug to breakpoint at the total score to read it and input it into the advent of code page, because it apparently ran fine but the fprintf to stdout just wouldn't produce results. I switched around where I printed some text and all of a sudden it started printing the results (as seen below) and I put it back to its original state and it had no problem what so ever. I'm not sure if Visual Studio caches the executables or windows had an aneurysm, in the end it worked out. The A* pathing I know kind of, the problem for me was that I wanted to make a fancy variable magnification and started delving in that, but as soon as I just made a map of the magnification instead it was just so much easier. Guh.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -134,4 +137,8 @@ Result Part 2:
 - Day 14 -
 Result Part 1: 2621 (0 ms, 590978 cycles passed)
 Result Part 2: 2843834241366 (0 ms, 1590043 cycles passed)
+
+- Day 15 -
+Result Part 1: 441 (3 ms, 8788355 cycles passed)
+Result Part 2: 2849 (218 ms, 635376732 cycles passed)
 ```
