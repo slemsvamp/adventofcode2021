@@ -72,6 +72,9 @@ Ok, I know I could speed this one up by using minheaps or priorityqueues and wha
 ## Day 16
 Ok, so I'll accept this solution I made. There's a shortcut on Part 1 where I left versionSum just be globally kept track of. I wouldn't allow this in production code, but this problem took a lot of time because of chasing an error I had in the code that I spent hours on. In the end, this is what we'll get for now. So, I actually had no real problem solving the actual problems, but after a good night's sleep I looked at the problem I was having not getting the right answer. Everything seemed to work fine but I realized it HAS to be the numbers that are wrong. It turns out row 110, `result += (u64)*(literalBuffer + processLiteralIndex) << (literalBufferCount - processLiteralIndex - 1);`, didn't have a proper cast to `u64` and when I added it, vóila. It was frustrating, but I'm glad I finally figured out the technical bug I had.
 
+## Day 17
+This one felt cheesy, I think there are nicer ways of solving this, but I kind of just went all approximate and not mathematical. If the problem was more difficult I think I'd not settle as easy for an easy solution. I was ready to almost leave it with `from x in 1..200` and `from y in -100..100` kind of a deal, but I scale it on the target area, because most values outside wouldn't make sense. Since you add X instantly you're instantly overshooting the area, so it shouldn't be larger and such. I was tired after day16, which I actually finished AFTER this one, but I'm comitting them in order, so I'll leave this one like this.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -148,4 +151,8 @@ Result Part 2: 2849 (218 ms, 635376732 cycles passed)
 - Day 16 -
 Result Part 1: 897 (0 ms, 430478 cycles passed)
 Result Part 2: 9485076995911 (0 ms, 290570 cycles passed)
+
+- Day 17 -
+Result Part 1: 4950 (1 ms, 3041892 cycles passed)
+Result Part 2: 1477 (1 ms, 2924947 cycles passed)
 ```
