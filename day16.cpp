@@ -107,7 +107,7 @@ GetLiteral(char **playheadPointer)
     }
     
     for (u32 processLiteralIndex = 0; processLiteralIndex < literalBufferCount; processLiteralIndex++)
-        result += *(literalBuffer + processLiteralIndex) << (literalBufferCount - processLiteralIndex - 1);
+        result += (u64)*(literalBuffer + processLiteralIndex) << (literalBufferCount - processLiteralIndex - 1);
 
     free(literalBuffer);
 
@@ -183,18 +183,6 @@ RecursivePacketSniffer(char **buffer, char *endAddress, u32 packetReadCount)
 
     free(packetBuffer);
     return result;
-}
-
-
-internal u32
-Part1()
-{
-    file_data file = ReadToEndOfFile("input\\day16-input.txt");
-    parse_result parseResult = Parse(file);
-
-    // TODO: calculate versionSum instead of cheesing it.
-
-    return _versionSum;
 }
 
 internal u64
@@ -281,81 +269,6 @@ PacketsEqualTo(packet *packets)
     return (value1 == value2);
 }
 
-internal void
-PrintMargin()
-{
-    for (u32 depthIndex = 0; depthIndex < _depth; depthIndex++)
-        DebugLog(">");
-    DebugLog(" ");
-}
-
-/*
-internal u64
-DebugExecute(packet p)
-{
-    _depth++;
-    u64 result = 0;
-
-    b8 debug = 0;
-    if (debug) PrintMargin();
-
-    switch (p.TypeId)
-    {
-        case 0: // Sum, if only one subpacket, the value of the subpacket, else all combined
-            if (debug) DebugLog("Sum (package count=%d)\n", p.SubpacketCount);
-            result = PacketsSum(p.Subpackets, p.SubpacketCount);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 1: // Product
-            if (debug) DebugLog("Product (package count=%d)\n", p.SubpacketCount);
-            result = PacketsProduct(p.Subpackets, p.SubpacketCount);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 2: // Min
-            if (debug) DebugLog("Min (package count=%d)\n", p.SubpacketCount);
-            result = PacketsMin(p.Subpackets, p.SubpacketCount);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 3: // Max
-            if (debug) DebugLog("Max (package count=%d)\n", p.SubpacketCount);
-            result = PacketsMax(p.Subpackets, p.SubpacketCount);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 4:
-            if (debug) DebugLog("Value = %llu\n", p.Value);
-            result = p.Value;
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 5: // GreaterThan, always two subpackets
-            if (debug) DebugLog("GreatherThan (package count=%d)\n", p.SubpacketCount);
-            result = PacketsGreaterThan(p.Subpackets);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 6: // LessThan, always two subpackets
-            if (debug) DebugLog("LessThan (package count=%d)\n", p.SubpacketCount);
-            result = PacketsLessThan(p.Subpackets);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        case 7: // EqualTo, always two subpackets
-            if (debug) DebugLog("EqualTo (package count=%d)\n", p.SubpacketCount);
-            result = PacketsEqualTo(p.Subpackets);
-            if (debug) { PrintMargin(); DebugLog("Return=%llu\n", result); }
-            _depth--;
-        break;
-        InvalidDefaultCase;
-    };
-
-    return result;
-}
-*/
-
 internal u64
 Execute(packet p)
 {
@@ -377,16 +290,27 @@ Execute(packet p)
     return result;
 }
 
+internal u32
+Part1()
+{
+    file_data file = ReadToEndOfFile("input\\day16-input.txt");
+    parse_result parseResult = Parse(file);
+
+    // _versionSum is calculated globally, because why not.
+
+    return _versionSum;
+}
+
 internal u64
 Part2()
 {
     file_data file = ReadToEndOfFile("input\\day16-input.txt");
     parse_result parseResult = Parse(file);
     packets_info packetsInfo = parseResult.PacketsInfo;
-    
     u64 result = 0;
 
     Assert(packetsInfo.PacketCount == 1);
+
     packet p = *packetsInfo.Packets;
     result = Execute(p);
 
@@ -399,7 +323,7 @@ main(s32 argumentCount, char *arguments[])
     clock_t startTime = clock();
     u64 startCycles = __rdtsc();
 
-    //u32 resultPart1 = Part1();
+    u32 resultPart1 = Part1();
 
     clock_t part1Time = clock();
     u64 part1Cycles = __rdtsc();
@@ -410,10 +334,8 @@ main(s32 argumentCount, char *arguments[])
     u64 endCycles = __rdtsc();
 
     DebugLog("- Day 16 -\n");
-    //DebugLog("Result Part 1: %d (%d ms, %llu cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
+    DebugLog("Result Part 1: %d (%d ms, %llu cycles passed)\n", resultPart1, (part1Time - startTime) * 1000 / CLOCKS_PER_SEC, (part1Cycles - startCycles));
     DebugLog("Result Part 2: %llu (%d ms, %llu cycles passed)\n", resultPart2, (endTime - part1Time) * 1000 / CLOCKS_PER_SEC, (endCycles - part1Cycles));
-    DebugLog("\n");
-    DebugLog("6084175846 is too low\n");
     DebugLog("\n");
 
     return 0;
