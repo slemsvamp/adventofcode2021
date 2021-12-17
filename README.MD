@@ -69,6 +69,9 @@ Oh dear, this one was not fun. I was SO absolutely sure that "hey, i know this, 
 ## Day 15
 Ok, I know I could speed this one up by using minheaps or priorityqueues and what not, but I think this is good enough. It's a bit slow for my taste but I had some weird issues with even printing the result. This is some bug I'm not entirely sure what the cause of is. I had to debug to breakpoint at the total score to read it and input it into the advent of code page, because it apparently ran fine but the fprintf to stdout just wouldn't produce results. I switched around where I printed some text and all of a sudden it started printing the results (as seen below) and I put it back to its original state and it had no problem what so ever. I'm not sure if Visual Studio caches the executables or windows had an aneurysm, in the end it worked out. The A* pathing I know kind of, the problem for me was that I wanted to make a fancy variable magnification and started delving in that, but as soon as I just made a map of the magnification instead it was just so much easier. Guh.
 
+## Day 16
+Ok, so I'll accept this solution I made. There's a shortcut on Part 1 where I left versionSum just be globally kept track of. I wouldn't allow this in production code, but this problem took a lot of time because of chasing an error I had in the code that I spent hours on. In the end, this is what we'll get for now. So, I actually had no real problem solving the actual problems, but after a good night's sleep I looked at the problem I was having not getting the right answer. Everything seemed to work fine but I realized it HAS to be the numbers that are wrong. It turns out row 110, `result += (u64)*(literalBuffer + processLiteralIndex) << (literalBufferCount - processLiteralIndex - 1);`, didn't have a proper cast to `u64` and when I added it, vóila. It was frustrating, but I'm glad I finally figured out the technical bug I had.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -141,4 +144,8 @@ Result Part 2: 2843834241366 (0 ms, 1590043 cycles passed)
 - Day 15 -
 Result Part 1: 441 (3 ms, 8788355 cycles passed)
 Result Part 2: 2849 (218 ms, 635376732 cycles passed)
+
+- Day 16 -
+Result Part 1: 897 (0 ms, 430478 cycles passed)
+Result Part 2: 9485076995911 (0 ms, 290570 cycles passed)
 ```
