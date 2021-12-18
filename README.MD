@@ -75,6 +75,9 @@ Ok, so I'll accept this solution I made. There's a shortcut on Part 1 where I le
 ## Day 17
 This one felt cheesy, I think there are nicer ways of solving this, but I kind of just went all approximate and not mathematical. If the problem was more difficult I think I'd not settle as easy for an easy solution. I was ready to almost leave it with `from x in 1..200` and `from y in -100..100` kind of a deal, but I scale it on the target area, because most values outside wouldn't make sense. Since you add X instantly you're instantly overshooting the area, so it shouldn't be larger and such. I was tired after day16, which I actually finished AFTER this one, but I'm comitting them in order, so I'll leave this one like this.
 
+## Day 18
+Wowee... What does one say after this much pointer dancing? I'm not going to make this too much prettier I think, I will be happy with my first iteration because I kind of guess that in order to make this the way I want it I'd like to build the typical string manipulations you'd have for these kind of things. I started with the wrong approach first by kind of making a linked list chain to keep track of the depths and such. When I read the weird explode/split funtionality I noticed that the "left" number and "right" number was more akin to string manipulation instead of calculating it through parents and siblings. After that, it was just a lot of work to write all the code and eek the bugs out. For the longest time I noticed there was a buffer-overflow problem in my ReadToEndOfFile when handling it as a string for strtok and such, so I made it always add one byte to the end that is zero (`\0`). There's no arguing that there's likely some stuff that can be enhanced, but I put way too many hours into this to refactor it today at least!
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
@@ -155,4 +158,8 @@ Result Part 2: 9485076995911 (0 ms, 290570 cycles passed)
 - Day 17 -
 Result Part 1: 4950 (1 ms, 3041892 cycles passed)
 Result Part 2: 1477 (1 ms, 2924947 cycles passed)
+
+- Day 18 -
+Result Part 1: 3793 (8 ms, 24452720 cycles passed)
+Result Part 2: 4695 (110 ms, 320075028 cycles passed)
 ```

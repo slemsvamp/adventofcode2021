@@ -85,7 +85,7 @@ ReadToEndOfFile(char *filename)
         result.Size = ftell(file);
         fseek(file, 0, SEEK_SET);
 
-        result.Data = (char *)malloc(result.Size);
+        result.Data = (char *)calloc(result.Size + 1, 1);
         fread(result.Data, result.Size, 1, file);
 
         fclose(file);
