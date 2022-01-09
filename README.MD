@@ -78,6 +78,11 @@ This one felt cheesy, I think there are nicer ways of solving this, but I kind o
 ## Day 18
 Wowee... What does one say after this much pointer dancing? I'm not going to make this too much prettier I think, I will be happy with my first iteration because I kind of guess that in order to make this the way I want it I'd like to build the typical string manipulations you'd have for these kind of things. I started with the wrong approach first by kind of making a linked list chain to keep track of the depths and such. When I read the weird explode/split funtionality I noticed that the "left" number and "right" number was more akin to string manipulation instead of calculating it through parents and siblings. After that, it was just a lot of work to write all the code and eek the bugs out. For the longest time I noticed there was a buffer-overflow problem in my ReadToEndOfFile when handling it as a string for strtok and such, so I made it always add one byte to the end that is zero (`\0`). There's no arguing that there's likely some stuff that can be enhanced, but I put way too many hours into this to refactor it today at least!
 
+## Day 19
+
+## Day 20
+Ugh.. I need anything but O(n) contains, but I think that if I go back to all this I will just dictionary/bst up a lot of the solutions.
+
 # Benchmarks (approximates)
 I'm using clock() for the time, basically record the clock() timestamp difference and multiply by 1000 and divice by CLOCKS_PER_SEC (which is 1000 on my end), and this will result in 0 ms when it's faster than a millisecond so it will show up as 0. I use __rdtsc() from <windows.h> to count cycles passed. As far as I know this is not cycles that MY executable used, it's how many passed since the timestamps, this means it varies a lot because of how much work windows needs the CPU to do in the background. In practice it's more of a timestamp than a clock-efficiency measurement.
 
