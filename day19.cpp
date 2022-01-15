@@ -8,6 +8,7 @@
 #define MAX_BEACON_BUFFER 100
 #define MAX_SCANNER_MATCH_BUFFER 1000
 #define MAX_BEACON_MATCH_BUFFER 1000
+#define MIN_BEACONS_TO_MATCH 3
 
 const char *NEW_LINE = "\r\n";
 
@@ -45,12 +46,6 @@ operator+(coordinate left, coordinate right)
 }
 
 inline coordinate
-operator+=(coordinate left, coordinate right)
-{
-    return left + right;
-}
-
-inline coordinate
 operator-(coordinate left, coordinate right)
 {
     coordinate result = {};
@@ -58,12 +53,6 @@ operator-(coordinate left, coordinate right)
     result.Y = left.Y - right.Y;
     result.Z = left.Z - right.Z;
     return result;
-}
-
-inline coordinate
-operator-=(coordinate left, coordinate right)
-{
-    return left - right;
 }
 
 inline b8
@@ -306,7 +295,7 @@ MatchWith(u32 matcherIndex, u32 matcheeIndex, parse_result parseResult)
                     }
                 }
 
-                if (matches >= 12)
+                if (matches >= MIN_BEACONS_TO_MATCH)
                 {
                     result.RotationIndex = rotationIndex;
                     result.ScannerRelativePosition = proposedMatcheeScannerCoordinate;
@@ -365,9 +354,11 @@ GetScannerMatches(u32 matcherIndex, s32 *scanners, parse_result parseResult)
 
 struct detection_history
 {
-    coordinate DetectedByCoordinate;
+    coordinate RelativePosition;
     u32 RotationIndex;
 };
+
+s32 _originScannerIndex = -1;
 
 internal void
 GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseResult, dictionary *beaconDictionary, detection_history *detectionHistory, u32 detectionHistoryCount)
@@ -388,7 +379,7 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
 
         scanner_match scannerMatch = MatchWith(matcherIndex, matcheeIndex, parseResult);
 
-        if (scannerMatch.BeaconMatchCount >= 12)
+        if (scannerMatch.BeaconMatchCount >= MIN_BEACONS_TO_MATCH)
         {
             DebugLog("MATCHED (%d) [Scanner %d]->[Scanner %d] at Rotation %d\n", scannerMatch.BeaconMatchCount, matcherIndex, matcheeIndex, scannerMatch.RotationIndex);
             DebugLog("Relative Position: %d,%d,%d\n", scannerMatch.ScannerRelativePosition.X, scannerMatch.ScannerRelativePosition.Y, scannerMatch.ScannerRelativePosition.Z);
@@ -397,24 +388,136 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
             scanner matcherScanner = *(parseResult.Scanners + matcherIndex);
             scanner matcheeScanner = *(parseResult.Scanners + matcheeIndex);
 
-            matrix unrotateMatrix = MatrixIdentity();
+            detection_history *detectionHistoryBuffer = (detection_history *)calloc(detectionHistoryCount * 2 + 2, sizeof(detection_history));
+            memcpy(detectionHistoryBuffer, detectionHistory, detectionHistoryCount * sizeof(detection_history));
+
+
+            // 1. Put all the matchee beacons in a buffer so we can change them
+            // 2. Iterate through detectionHistory
+            //   2.1. Rotate the relative position of scanner
+            //   2.2. Rotate all beacons
+            //   2.3. Apply relative coordinate?
+
+            // So the idea is to go one scanner back at a time and keep beacons relative until we get to the origin
+
+
+            if (_originScannerIndex < 0)
+            {
+                _originScannerIndex = matcherIndex;
+                *(detectionHistoryBuffer + detectionHistoryCount++) = {0, 0, 0, 0};
+
+                for (u32 beaconIndex = 0; beaconIndex < matcherScanner.BeaconCount; beaconIndex++)
+                {
+                    coordinate beacon = *(matcherScanner.Beacons + beaconIndex);
+                    char *key = CoordinateToKey(beacon);
+
+                    DebugLog("Found '%s', ", key);
+
+                    if (!DICT_ContainsKey(beaconDictionary, key))
+                    {
+                        DICT_Add(beaconDictionary, key, (void *)(matcherScanner.Beacons + beaconIndex));
+                        DebugLog("added.\n");
+                    }
+                    else DebugLog("already existed.\n");
+                }
+            }
+
+            matrix rotateMatrix = MatrixIdentity();
             coordinate coordinateAdjustment = {};
 
+            detection_history historyEntry = {};
+            historyEntry.RotationIndex = scannerMatch.RotationIndex;
+            historyEntry.RelativePosition = scannerMatch.ScannerRelativePosition;
+            *(detectionHistoryBuffer + detectionHistoryCount++) = historyEntry;
+
+            for (u32 historyIndex = 0; historyIndex < detectionHistoryCount; historyIndex++)
+            {
+                detection_history historyEntry = *(detectionHistoryBuffer + historyIndex);
+                DebugLog("Entry (X=%d, Y=%d, Z=%d) RI=%d\n", historyEntry.RelativePosition.X, historyEntry.RelativePosition.Y, historyEntry.RelativePosition.Z, historyEntry.RotationIndex);
+            }
+
+            // add matcher beacons with current history
+            for (s32 historyIndex = detectionHistoryCount - 1; historyIndex > 0; historyIndex--)
+            {
+                detection_history historyEntry = *(detectionHistoryBuffer + historyIndex - 1);
+                rotateMatrix = rotateMatrix * RotateMatrix(_rotationsOfX[historyEntry.RotationIndex], _rotationsOfY[historyEntry.RotationIndex], _rotationsOfZ[historyEntry.RotationIndex]);
+                detection_history historyEntry2 = *(detectionHistoryBuffer + historyIndex);
+                matrix m = MatrixTranslation(historyEntry2.RelativePosition) * rotateMatrix;
+                coordinate c = CoordinateFromMatrix(m);
+
+                //if (historyIndex != detectionHistoryCount - 1)
+                    coordinateAdjustment = coordinateAdjustment + c;
+
+                // TODO: We need to rotate the whole coordinateAdjustment after adding the relative
+                DebugLog("Adjustment: (X=%d, Y=%d, Z=%d)\n", c.X, c.Y, c.Z);
+            }
+
+            DebugLog("Coordinate Adjustment: (X=%d, Y=%d, Z=%d)\n", coordinateAdjustment.X, coordinateAdjustment.Y, coordinateAdjustment.Z);
+            DebugLog("ScannerMatch RelativePosition: (X=%d, Y=%d, Z=%d)\n", scannerMatch.ScannerRelativePosition.X, scannerMatch.ScannerRelativePosition.Y, scannerMatch.ScannerRelativePosition.Z);
+            //coordinateAdjustment = coordinateAdjustment + scannerMatch.ScannerRelativePosition;
+            //DebugLog("Coordinate Adjustment: (X=%d, Y=%d, Z=%d)\n", coordinateAdjustment.X, coordinateAdjustment.Y, coordinateAdjustment.Z);
+
+            detection_history lastEntry = *(detectionHistoryBuffer + detectionHistoryCount - 1);
+            rotateMatrix = rotateMatrix * RotateMatrix(_rotationsOfX[lastEntry.RotationIndex], _rotationsOfY[lastEntry.RotationIndex], _rotationsOfZ[lastEntry.RotationIndex]);
+
+            for (u32 beaconIndex = 0; beaconIndex < matcheeScanner.BeaconCount; beaconIndex++)
+            {
+                coordinate beacon = *(matcheeScanner.Beacons + beaconIndex);
+                if (beacon.Z > 0)
+                    DebugLog("Special A: (X=%d, Y=%d, Z=%d)\n", beacon.X, beacon.Y, beacon.Z);
+                matrix rotatedBeaconMatrix = MatrixTranslation(beacon) * rotateMatrix;
+                coordinate *rotatedBeacon = (coordinate *)malloc(sizeof(coordinate));
+                *rotatedBeacon = CoordinateFromMatrix(rotatedBeaconMatrix);
+
+                if (beacon.Z > 0)
+                    DebugLog("Special B: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
+
+                *rotatedBeacon = *rotatedBeacon + coordinateAdjustment;
+
+                if (beacon.Z > 0)
+                    DebugLog("Special C: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
+
+                char *key = CoordinateToKey(*rotatedBeacon);
+
+                //DebugLog("Found '%s', ", key);
+
+                if (!DICT_ContainsKey(beaconDictionary, key))
+                {
+                    DICT_Add(beaconDictionary, key, rotatedBeacon);
+                    //DebugLog("added.\n");
+                }
+                else
+                {
+                    //DebugLog("already existed.\n");
+                }
+            }
+
+            /*
             if (detectionHistoryCount > 0)
             {
                 coordinateAdjustment = (*detectionHistory).DetectedByCoordinate;
             }
 
-            // for each already existing rotation, do the steps
             for (u32 historyIndex = 0; historyIndex < detectionHistoryCount; historyIndex++)
             {
                 detection_history historyEntry = *(detectionHistory + historyIndex);
                 unrotateMatrix = unrotateMatrix * UnrotateMatrix(_normalizeRotationsOfX[historyEntry.RotationIndex], _normalizeRotationsOfY[historyEntry.RotationIndex], _normalizeRotationsOfZ[historyEntry.RotationIndex]);
-                coordinateAdjustment -= historyEntry.DetectedByCoordinate;
+                matrix scannerMatrix = MatrixTranslation(scannerMatch.ScannerRelativePosition) * unrotateMatrix;
+                coordinate rotatedScannerPosition = CoordinateFromMatrix(scannerMatrix);
+                DebugLog("Corrected Position (X=%d, Y=%d, Z=%d)\n", rotatedScannerPosition.X, rotatedScannerPosition.Y, rotatedScannerPosition.Z);
+                //coordinateAdjustment -= historyEntry.DetectedByCoordinate;
             }
+
+            for (u32 historyIndex = 0; historyIndex < detectionHistoryCount; historyIndex++)
+            {
+                detection_history historyEntry = *(detectionHistory + historyIndex);
+                DebugLog("Entry (X=%d, Y=%d, Z=%d) RI=%d\n", historyEntry.DetectedByCoordinate.X, historyEntry.DetectedByCoordinate.Y, historyEntry.DetectedByCoordinate.Z, historyEntry.RotationIndex);
+            }
+            */
 
             // we are only looking at the matcher beacons, when will we add the matchee beacons then?
 
+            /*
             for (u32 beaconIndex = 0; beaconIndex < matcherScanner.BeaconCount; beaconIndex++)
             {
                 coordinate beacon = *(matcherScanner.Beacons + beaconIndex);
@@ -441,6 +544,8 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
 
             detection_history newEntry = {};
             newEntry.RotationIndex = scannerMatch.RotationIndex;
+            newEntry.RelativePosition = scannerMatch.ScannerRelativePosition;
+            */
 /*
             // TODO: bleh
             matrix x = MatrixTranslation(scannerMatch.ScannerRelativePosition);
@@ -449,13 +554,11 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
 
             DebugLog("AdjustmentCoordinate: X%d, Y%d, Z%d\n", xyz.X, xyz.Y, xyz.Z);
 */
-            newEntry.DetectedByCoordinate = scannerMatch.ScannerRelativePosition;
 
-            *(newDetectionHistory + detectionHistoryCount) = newEntry;
 
             *(scanners + matcheeIndex) = -1;
 
-            GetScannerMatchesRecursive(matcheeIndex, scanners, parseResult, beaconDictionary, newDetectionHistory, detectionHistoryCount + 1);
+            GetScannerMatchesRecursive(matcheeIndex, scanners, parseResult, beaconDictionary, detectionHistoryBuffer, detectionHistoryCount);
         }
         else
         {
@@ -468,7 +571,7 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\temp.txt");
+    file_data file = ReadToEndOfFile("input\\temp2.txt");
     parse_result parseResult = Parse(file);
 
     // TODO: start with some scanner, collect a list of matches
