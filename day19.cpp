@@ -406,6 +406,9 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
                 _originScannerIndex = matcherIndex;
                 *(detectionHistoryBuffer + detectionHistoryCount++) = {0, 0, 0, 0};
 
+                // The first scanner we match we'll consider being the origin scanner and thus we only
+                // add these beacons relative position as this scanner is seen as being the origin point of 0,0,0
+
                 for (u32 beaconIndex = 0; beaconIndex < matcherScanner.BeaconCount; beaconIndex++)
                 {
                     coordinate beacon = *(matcherScanner.Beacons + beaconIndex);
@@ -430,6 +433,7 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
             historyEntry.RelativePosition = scannerMatch.ScannerRelativePosition;
             *(detectionHistoryBuffer + detectionHistoryCount++) = historyEntry;
 
+            // This is just a debug print of what's in the detectionHistoryBuffer
             for (u32 historyIndex = 0; historyIndex < detectionHistoryCount; historyIndex++)
             {
                 detection_history historyEntry = *(detectionHistoryBuffer + historyIndex);
@@ -463,19 +467,16 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
             for (u32 beaconIndex = 0; beaconIndex < matcheeScanner.BeaconCount; beaconIndex++)
             {
                 coordinate beacon = *(matcheeScanner.Beacons + beaconIndex);
-                if (beacon.Z > 0)
-                    DebugLog("Special A: (X=%d, Y=%d, Z=%d)\n", beacon.X, beacon.Y, beacon.Z);
+                //if (beacon.Z > 0) DebugLog("Special A: (X=%d, Y=%d, Z=%d)\n", beacon.X, beacon.Y, beacon.Z);
                 matrix rotatedBeaconMatrix = MatrixTranslation(beacon) * rotateMatrix;
                 coordinate *rotatedBeacon = (coordinate *)malloc(sizeof(coordinate));
                 *rotatedBeacon = CoordinateFromMatrix(rotatedBeaconMatrix);
 
-                if (beacon.Z > 0)
-                    DebugLog("Special B: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
+                //if (beacon.Z > 0) DebugLog("Special B: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
 
                 *rotatedBeacon = *rotatedBeacon + coordinateAdjustment;
 
-                if (beacon.Z > 0)
-                    DebugLog("Special C: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
+                //if (beacon.Z > 0) DebugLog("Special C: (X=%d, Y=%d, Z=%d)\n", rotatedBeacon->X, rotatedBeacon->Y, rotatedBeacon->Z);
 
                 char *key = CoordinateToKey(*rotatedBeacon);
 
@@ -571,7 +572,7 @@ GetScannerMatchesRecursive(u32 matcherIndex, s32 *scanners, parse_result parseRe
 internal u32
 Part1()
 {
-    file_data file = ReadToEndOfFile("input\\temp2.txt");
+    file_data file = ReadToEndOfFile("input\\temp.txt");
     parse_result parseResult = Parse(file);
 
     // TODO: start with some scanner, collect a list of matches
